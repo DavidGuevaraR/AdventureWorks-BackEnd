@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - MONGODB_URI=mongodb://admin:adminreW2322@mongodb:27017/david_clientes?authSource=admin
+      - JWT_SECRET=super-secret
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7
+    restart: always
+    ports:
+      - "27017:27017"   # keep only if you need to connect from host
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=adminreW2322
+    command: ["mongod", "--auth", "--bind_ip_all"]
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
